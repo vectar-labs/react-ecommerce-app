@@ -1,6 +1,8 @@
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 
 const Auth = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -9,13 +11,17 @@ const Auth = () => {
 
   const onSubmit = (data) => {
     console.log(data);
+    navigate("/");
   };
 
   return (
     <div className="w-full min-h-screen flex items-center justify-center ">
-      <form className="w-full max-w-xs mx-auto" onSubmit={handleSubmit(onSubmit)}>
+      <form className="w-full max-w-sm mx-auto" onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-5 w-full">
-          <label htmlFor="email" className="block mb-2.5 text-sm font-medium text-heading">
+          <h2 className="text-xl text-slate-800 text-center font-medium">Welcome back</h2>
+        </div>
+        <div className="mb-5 w-full">
+          <label htmlFor="email" className="block mb-2.5 text-sm font-medium text-heading text-slate-600">
             Your email
           </label>
           <input
@@ -28,7 +34,7 @@ const Auth = () => {
           <p className="text-xs text-red-400 mt-3">{errors.email && "Email is required"}</p>
         </div>
         <div className="mb-5">
-          <label htmlFor="password" className="block mb-2.5 text-sm font-medium text-heading">
+          <label htmlFor="password" className="block mb-2.5 text-sm font-medium text-heading text-slate-600">
             Your password
           </label>
           <input
@@ -38,7 +44,7 @@ const Auth = () => {
             className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
             placeholder="••••••••"
           />
-          <p className="text-xs text-red-400 mt-3">{errors.password && "Password is required it should be between 6 and 20 characters"}</p>
+          <p className="text-xs text-red-400 mt-3">{errors.password && "Password is required"}</p>
         </div>
 
         <button
@@ -48,7 +54,7 @@ const Auth = () => {
           Login
         </button>
         <label htmlFor="remember" className="flex items-center my-5">
-          <p className="ms-2 text-sm font-medium text-heading select-none">
+          <p className="ms-2 text-sm text-heading text-slate-600">
             Dont have an account?{" "}
             <a href="/auth/signup" className="text-fg-brand hover:underline">
               Sign up

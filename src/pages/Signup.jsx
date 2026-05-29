@@ -1,9 +1,26 @@
-import React from "react";
+import { useContext } from "react";
+import { useForm } from "react-hook-form";
+import { AuthContext } from "../context/AuthContext";
 
 const Signup = () => {
+  const { signup } = useContext(AuthContext);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => {
+    signup(data.name, data.email, data.password);
+    console.log(data);
+  };
   return (
     <div className="w-full min-h-screen flex items-center justify-center ">
-      <form className="w-full max-w-xs mx-auto">
+      <form className="w-full max-w-sm mx-auto" onSubmit={handleSubmit(onSubmit)}>
+        <div className="mb-5 w-full">
+          <h2 className="text-xl text-slate-800 text-center font-medium">Create account</h2>
+          <p className="text-sm text-slate-600 text-center">Join our community and enjoy exclusive benefits!</p>
+        </div>
         <div className="mb-5">
           <label htmlFor="email" className="block mb-2.5 text-sm font-medium text-heading">
             Your name
@@ -13,8 +30,9 @@ const Signup = () => {
             id="name"
             className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
             placeholder="John Doe"
-            required
+            {...register("name", { required: true })}
           />
+          {errors.name && <p className="text-red-500 text-sm my-2">Name is required</p>}
         </div>
         <div className="mb-5">
           <label htmlFor="email" className="block mb-2.5 text-sm font-medium text-heading">
@@ -25,8 +43,9 @@ const Signup = () => {
             id="email"
             className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
             placeholder="name@flowbite.com"
-            required
+            {...register("email", { required: true })}
           />
+          {errors.email && <p className="text-red-500 text-sm my-2">Email is required</p>}
         </div>
         <div className="mb-5">
           <label htmlFor="password" className="block mb-2.5 text-sm font-medium text-heading">
@@ -37,8 +56,9 @@ const Signup = () => {
             id="password"
             className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
             placeholder="••••••••"
-            required
+            {...register("password", { required: true, minLength: 6, maxLength: 20 })}
           />
+          {errors.password && <p className="text-red-500 text-sm my-2">Password required to be between 6 and 20 characters</p>}
         </div>
 
         <button
@@ -48,7 +68,7 @@ const Signup = () => {
           Signup
         </button>
         <label htmlFor="remember" className="flex items-center my-5">
-          <p className="ms-2 text-sm font-medium text-heading select-none">
+          <p className="ms-2 text-sm  text-heading text-slate-700">
             Already have an account?{" "}
             <a href="/auth" className="text-fg-brand hover:underline">
               Login

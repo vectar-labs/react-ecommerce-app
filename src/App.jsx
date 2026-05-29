@@ -4,17 +4,24 @@ import Auth from "./pages/Auth";
 import Checkout from "./pages/Checkout";
 import Navbar from "./components/Navbar";
 import Signup from "./pages/Signup";
+import { AuthProvider } from "./context/AuthContext";
 
 function App() {
   return (
     <>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/auth" element={<Auth />} />
-        <Route path="/auth/signup" element={<Signup />} />
-        <Route path="/checkout" element={<Checkout />} />
-      </Routes>
+      <AuthProvider>
+        <Navbar />
+        <Routes>
+          {/* protected routes */}
+
+          <Route path="/" element={<Home />} />
+          <Route path="/checkout" element={<Checkout />} />
+
+          {/* public route */}
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/auth/signup" element={<Signup />} />
+        </Routes>
+      </AuthProvider>
     </>
   );
 }
