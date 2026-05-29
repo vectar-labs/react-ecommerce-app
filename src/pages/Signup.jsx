@@ -3,16 +3,18 @@ import { useForm } from "react-hook-form";
 import { AuthContext } from "../context/AuthContext";
 
 const Signup = () => {
-  const { signup } = useContext(AuthContext);
+  const { signup, error } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
 
   const onSubmit = (data) => {
     signup(data.name, data.email, data.password);
-    console.log(data);
+    // clear form after submission
+    reset();
   };
   return (
     <div className="w-full min-h-screen flex items-center justify-center ">
@@ -43,7 +45,7 @@ const Signup = () => {
             id="email"
             className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
             placeholder="name@flowbite.com"
-            {...register("email", { required: true })}
+            {...register("email", { required: "Email is required" })}
           />
           {errors.email && <p className="text-red-500 text-sm my-2">Email is required</p>}
         </div>
@@ -56,9 +58,9 @@ const Signup = () => {
             id="password"
             className="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"
             placeholder="••••••••"
-            {...register("password", { required: true, minLength: 6, maxLength: 20 })}
+            {...register("password", { required: "Password is required", minLength: 6, maxLength: 12 })}
           />
-          {errors.password && <p className="text-red-500 text-sm my-2">Password required to be between 6 and 20 characters</p>}
+          {errors.password && <p className="text-red-500 text-sm my-2">Password is required to be between 6 and 12 characters</p>}
         </div>
 
         <button
@@ -67,6 +69,7 @@ const Signup = () => {
         >
           Signup
         </button>
+        {error && <p className="text-red-500 text-sm my-2">{error}</p>}
         <label htmlFor="remember" className="flex items-center my-5">
           <p className="ms-2 text-sm  text-heading text-slate-700">
             Already have an account?{" "}

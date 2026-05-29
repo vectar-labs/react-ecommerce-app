@@ -1,17 +1,20 @@
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 const Auth = () => {
-  const navigate = useNavigate();
+  const { login, error } = useContext(AuthContext);
+
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
-    navigate("/");
+    login(data.email, data.password);
+    reset();
   };
 
   return (
@@ -53,6 +56,7 @@ const Auth = () => {
         >
           Login
         </button>
+        {error && <p className="text-red-500 text-sm my-2">{error}</p>}
         <label htmlFor="remember" className="flex items-center my-5">
           <p className="ms-2 text-sm text-heading text-slate-600">
             Dont have an account?{" "}
