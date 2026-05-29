@@ -12,7 +12,7 @@ const Navbar = () => {
           Techy Shop
         </Link>
         <div className="flex space-x-4">
-          <p>{user ? `Welcome back, ${user.name}!` : ""}</p>
+          <p>{user ? `Welcome back, ${user.username}!` : ""}</p>
           <Link to="/">Home</Link>
           <Link to="/cart">Cart</Link>
         </div>

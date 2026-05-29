@@ -1,23 +1,31 @@
 import { createContext, useState } from "react";
+import { useNavigate } from "react-router";
+
 export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(localStorage.getItem("currentUser") ? JSON.parse(localStorage.getItem("currentUser")) : null);
+  const [user, setUser] = useState(localStorage.getItem("currentUser") ? { username: JSON.parse(localStorage.getItem("currentUser")) } : null);
+  const [error, setError] = useState(null);
+  const navigation = useNavigate();
 
   // signup function to add user to localStorage and set currentUser
   const signup = (name, email, password) => {
     const users = JSON.parse(localStorage.getItem("users")) || [];
-    // check if user already exists
-    if (users.find((user) => user.email === email)) {
-      return { success: false, message: "User already exists" };
+
+    const existingUser = users.find((user) => user.email === email);
+    if (existingUser) {
+      setError("Email already exists");
+      return { success: false, message: "Email already exists" };
     }
 
     const newUser = { name, email, password };
     users.push(newUser);
     localStorage.setItem("users", JSON.stringify(users));
-    localStorage.setItem("currentUser", JSON.stringify(name));
-    setUser(newUser);
-
+    localStorage.setItem("currentUser", JSON.stringify(newUser.name));
+    setUser({ username: newUser.name });
+    setError(null);
+    console.log("User signed up successfully");
+    console.log(users);
     return { success: true };
   };
 
@@ -27,10 +35,12 @@ export const AuthProvider = ({ children }) => {
     const existingUser = users.find((user) => user.email === email && user.password === password);
     if (existingUser) {
       localStorage.setItem("currentUser", JSON.stringify(existingUser.name));
-      setUser(existingUser);
-      return { success: true };
+      setUser({ username: existingUser.name });
+      navigation("/");
+      return console.log("User logged in successfully");
     } else {
-      return { success: false, message: "Invalid email or password" };
+      setError("Invalid email or password");
+      return console.log("Invalid email or password");
     }
   };
 
@@ -38,7 +48,8 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem("currentUser");
     setUser(null);
+    setError(null);
   };
 
-  return <AuthContext.Provider value={{ user, setUser, login, signup, logout }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ user, setUser, login, signup, logout, error, setError }}>{children}</AuthContext.Provider>;
 };
