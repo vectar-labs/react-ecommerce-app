@@ -1,6 +1,11 @@
 import { Link } from "react-router";
+import { useCart } from "../context/CartContext";
 
 const ProductCard = ({ product }) => {
+  const { addToCart, cartItems } = useCart();
+  const productInCart = cartItems.find((item) => item.id === product.id);
+
+  const productQuantity = productInCart ? productInCart.quantity : 0;
   return (
     <div className="">
       <div>
@@ -13,7 +18,9 @@ const ProductCard = ({ product }) => {
         <Link to={`/product/${product.id}`} className="text-sm text-teal-500 hover:underline">
           View Details
         </Link>
-        <button className="bg-teal-500 text-white py-2 px-4 rounded-md hover:bg-teal-600 my-3 cursor-pointer">Add to Cart</button>
+        <button className="bg-teal-500 text-white py-2 px-4 rounded-md hover:bg-teal-600 my-3 cursor-pointer" onClick={() => addToCart(product.id)}>
+          Add to Cart {productQuantity}
+        </button>
       </div>
     </div>
   );

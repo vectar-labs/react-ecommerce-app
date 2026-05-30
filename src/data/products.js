@@ -105,3 +105,7 @@ export const products = [
     image: "https://picsum.photos/id/1074/600/400",
   },
 ];
+
+export const getProductById = (id) => {
+  return products.find((product) => product.id === id);
+};
