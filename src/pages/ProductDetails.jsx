@@ -1,11 +1,18 @@
 import { useParams, Link, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import { products } from "../data/products";
+import { useCart } from "../context/CartContext";
+
 const ProductDetails = () => {
+  const { id } = useParams();
   const [product, setProduct] = useState(null);
   const navigate = useNavigate();
 
-  const { id } = useParams();
+  const { addToCart, cartItems } = useCart();
+  const productInCart = cartItems.find((item) => item.id === parseInt(id));
+
+  const productQuantity = productInCart ? productInCart.quantity : 0;
+
   useEffect(() => {
     const foundProduct = products.find((p) => p.id === parseInt(id));
     if (!foundProduct) {
@@ -26,7 +33,9 @@ const ProductDetails = () => {
             <p className="text-lg font-bold">${product.price.toFixed(2)}</p>
           </>
         )}
-        <button className="bg-teal-500 text-white py-2 px-4 rounded-md hover:bg-teal-600 my-3 cursor-pointer">Add to Cart</button>
+        <button className="bg-teal-500 text-white py-2 px-4 rounded-md hover:bg-teal-600 my-3 cursor-pointer" onClick={() => addToCart(product.id)}>
+          Add to Cart {productQuantity > 0 ? `(${productQuantity})` : ""}
+        </button>
         <Link to="/">
           <button className="bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600 my-3 cursor-pointer">Back to Products</button>
         </Link>

@@ -1,9 +1,11 @@
 import { Link } from "react-router";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
+  const { totalItems } = useCart();
 
   return (
     <nav className="w-full py-2.5">
@@ -14,7 +16,7 @@ const Navbar = () => {
         <div className="flex space-x-4">
           <p>{user ? `Welcome back, ${user.username}!` : ""}</p>
           <Link to="/">Home</Link>
-          <Link to="/cart">Cart</Link>
+          <Link to="/cart">Cart ({totalItems})</Link>
         </div>
         <div className="flex space-x-4">
           {user ? (
